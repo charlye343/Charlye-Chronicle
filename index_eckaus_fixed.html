@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Eckaüs - Le Commencement</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #eee;
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        #menu, #game {
+            display: none;
+        }
+        .button {
+            background-color: #444;
+            color: #fff;
+            border: none;
+            padding: 15px 25px;
+            margin: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div id="mainMenu">
+    <h1>Bienvenue dans Eckaüs</h1>
+    <button class="button" onclick="startGame()">Commencer le jeu</button>
+    <button class="button" onclick="loadGame()">Reprendre ma partie</button>
+    <button class="button" onclick="clearSave()">Effacer la sauvegarde</button>
+</div>
+
+<div id="game">
+    <p id="storyText">Le jeu commence...</p>
+    <button class="button" onclick="nextStep()">Continuer</button>
+</div>
+
+<script>
+    let currentStep = 0;
+    const story = [
+        "Charlye se réveille dans un temple inconnu, le silence est lourd...",
+        "Un homme au masque démoniaque apparaît. Il se nomme Zao, le Sage.",
+        "'Eckaüs est en danger... tu dois le sauver', dit-il.",
+        "Une explosion retentit. Une créature démoniaque surgit.",
+        "Zao tend une dague à Charlye... le combat commence !"
+    ];
+
+    function startGame() {
+        currentStep = 0;
+        document.getElementById("mainMenu").style.display = "none";
+        document.getElementById("game").style.display = "block";
+        updateStory();
+    }
+
+    function updateStory() {
+        document.getElementById("storyText").innerText = story[currentStep];
+        saveGame();
+    }
+
+    function nextStep() {
+        currentStep++;
+        if (currentStep < story.length) {
+            updateStory();
+        } else {
+            document.getElementById("storyText").innerText = "Fin de la démo.";
+        }
+    }
+
+    function saveGame() {
+        localStorage.setItem("eckaus_save", currentStep);
+    }
+
+    function loadGame() {
+        const save = localStorage.getItem("eckaus_save");
+        if (save !== null) {
+            currentStep = parseInt(save);
+            document.getElementById("mainMenu").style.display = "none";
+            document.getElementById("game").style.display = "block";
+            updateStory();
+        } else {
+            alert("Aucune sauvegarde trouvée.");
+        }
+    }
+
+    function clearSave() {
+        localStorage.removeItem("eckaus_save");
+        alert("Sauvegarde effacée.");
+    }
+</script>
+
+</body>
+</html>
